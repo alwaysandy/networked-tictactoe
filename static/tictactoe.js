@@ -120,6 +120,17 @@ function addEventListeners() {
     tiles.forEach((tile) => {
         tile.addEventListener('click', handleClick);
     });
+
+    let reset_button = document.querySelector('#reset-game');
+    reset_button.addEventListener('click', () => {
+        socket.emit('reset_server');
+    });
+
+    let close_button = document.querySelector('#close-game');
+    close_button.addEventListener('click', () => {
+        window.location = '/';
+        socket.emit('close_game');
+    });
 }
 
 function reset_game() {
@@ -130,17 +141,6 @@ function reset_game() {
         }
     }
 }
-
-let reset_button = document.querySelector('#reset-game');
-reset_button.addEventListener('click', () => {
-    socket.emit('reset_server');
-});
-
-let close_button = document.querySelector('#close-game');
-close_button.addEventListener('click', () => {
-    window.location = '/';
-    socket.emit('close_game');
-});
 
 let pID;
 let pChar;
