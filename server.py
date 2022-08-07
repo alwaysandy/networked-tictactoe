@@ -61,5 +61,15 @@ def on_close():
     emit('close', broadcast=True)
     room_close("room")
 
+@socketio.on('disconnect')
+def on_disconnect():
+    player = ""
+    if (request.sid == game["p1"]):
+        player = "Player 1"
+    elif request.sid == game["p2"]:
+        player = "Player 2"
+    message = json.dumps(f"{player} disconnected")
+    emit('disconnected', message, broadcast=True)
+
 if __name__ == '__main__':
     socketio.run(app)

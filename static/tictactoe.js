@@ -102,12 +102,12 @@ function makeMove(x, y) {
             alert("TIE GAME!");
         } else {
             turn = turn == "X" ? "O" : "X";
+            statusDiv.textContent = `It is ${turn}'s turn`;
         }
     }
 }
 
 function handleClick(t) {
-    console.log(t.target.dataset);
     let x = parseInt(t.target.dataset.x);
     let y = parseInt(t.target.dataset.y);
     if (pChar && turn && pChar === turn) {
@@ -151,7 +151,6 @@ socket.emit('join', "");
 
 socket.on('player', (id) => {
     pID = JSON.parse(id);
-    console.log(pID);
 });
 
 socket.on('joined', (id) => {
@@ -162,10 +161,11 @@ socket.on('joined', (id) => {
         turn = "X";
         pChar = "O";
     }
+    turnDiv.textContent = `You are ${pChar}`;
+    statusDiv.textContent = `It is ${turn}'s turn`;
 });
 
 socket.on('move', (c) => {
-    console.log("Received");
     makeMove(c.x, c.y);
     turn = pChar;
 });
@@ -179,12 +179,18 @@ socket.on('reset_game', (id) => {
         turn = "X";
         pChar = "O";
     }
-
+    turnDiv.textContent = `You are ${pChar}`;
+    statusDiv.textContent = `It is ${turn}'s turn`;
     moves = 0;
 });
 
+socket.on('disconnected', (disconnectMsg) => {
+    //alert(disconnectMsg);
+    socket.emit('close_game');
+});
+
 socket.on('close', () => {
-    alert("Game closed by other player.");
+    alert("Game closed");
     window.location = '/';
 });
 
@@ -193,3 +199,5 @@ createBoard();
 const pieces = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
 let moves = 0;
 addEventListeners();
+let turnDiv = document.querySelector('#turn');
+let statusDiv = document.querySelector('#status');
