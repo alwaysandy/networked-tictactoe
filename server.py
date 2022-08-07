@@ -25,13 +25,13 @@ def on_join(data):
         print("TO player 1")
         game["p1"] = request.sid
         game["turn"] = game["p1"]
-        join_room("ASS")
+        join_room("room")
         pID = json.dumps(game["p1"])
         emit("player", pID, to=game["p1"])
     elif not game["p2"]:
         print("To player 2")
         game["p2"] = request.sid
-        join_room("ASS")
+        join_room("room")
         pID = json.dumps(game["p2"])
         emit("player", pID, to=game["p2"])
         emit('joined', pID, broadcast=True)
@@ -59,7 +59,7 @@ def on_close():
     game["p2"] = None
     game["turn"] = None
     emit('close', broadcast=True)
-    room_close("ASS")
+    room_close("room")
 
 if __name__ == '__main__':
     socketio.run(app)
